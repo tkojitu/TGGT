@@ -10,6 +10,7 @@ public class VirtualMachine {
     private int pc = -1;
     private Program program;
     private ArrayList<Turtle> turtles = new ArrayList<>();
+    private File source;
 
     public VirtualMachine() {
     }
@@ -19,10 +20,22 @@ public class VirtualMachine {
         program = compiler.compile(file);
         turtles.clear();
         pc = -1;
+        source = file;
+    }
+
+    public void reload() throws IOException, SyntaxErrorException {
+        if (source == null) {
+            return;
+        }
+        load(source);
     }
 
     public void run() {
         pc = 0;
+    }
+
+    public void save() {
+
     }
 
     public void execute(Canvas canvas) {
@@ -83,5 +96,9 @@ public class VirtualMachine {
 
     public void exit() {
         pc = -2;
+    }
+
+    public void abend() {
+        pc = -1;
     }
 }

@@ -40,4 +40,20 @@ public class CrystalView extends View {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
+
+    public void reload() {
+        try {
+            vm.reload();
+        } catch (IOException | SyntaxErrorException e) {
+            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void save() {
+        vm.save();
+    }
+
+    public void stop() {
+        vm.abend();
+    }
 }

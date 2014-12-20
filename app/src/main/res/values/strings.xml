@@ -2,7 +2,10 @@
 <resources>
 
     <string name="app_name">TGGT</string>
-    <string name="redraw">Redraw</string>
-    <string name="load">Load…</string>
+    <string name="draw">Draw</string>
+    <string name="load">Load</string>
+    <string name="reload">Reload</string>
+    <string name="save">Save</string>
+    <string name="stop">Stop</string>
 
 </resources>
