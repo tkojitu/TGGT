@@ -36,9 +36,7 @@ public class CrystalView extends View {
     public void load(File file) {
         try {
             vm.load(file);
-        } catch (IOException e) {
-            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        } catch (SyntaxErrorException e) {
+        } catch (IOException | SyntaxErrorException e) {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }

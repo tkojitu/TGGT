@@ -10,18 +10,22 @@ import java.util.StringTokenizer;
 public class Compiler {
     private StringBuffer buffer = new StringBuffer();
 
-    public ArrayList<Command> compile(File file) throws IOException, SyntaxErrorException {
-        ArrayList<Command> program = new ArrayList<Command>();
+    public Program compile(File file) throws IOException, SyntaxErrorException {
+        Program program = new Program();
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String line;
         while ((line = reader.readLine()) != null) {
             compileLine(program, line.trim());
         }
+        compileExit(program);
         return program;
     }
 
-    private void compileLine(ArrayList<Command> program, String line)
+    private void compileLine(Program program, String line)
             throws SyntaxErrorException {
+        if (line.isEmpty()) {
+            return;
+        }
         char ch = line.charAt(0);
         switch (ch) {
         case 'd':
@@ -31,6 +35,10 @@ public class Compiler {
         case 'm':
         case 'M':
             compileMove(program, line);
+            break;
+        case 'n':
+        case 'N':
+            compileName(program, line);
             break;
         case 's':
         case 'S':
@@ -54,27 +62,27 @@ public class Compiler {
         }
     }
 
-    private void compilePenDown(ArrayList<Command> program, String line)
+    private void compilePenDown(Program program, String line)
             throws SyntaxErrorException {
         StringTokenizer tokens = new StringTokenizer(line);
         String token = tokens.nextToken();
         if (!token.equals("d") && !token.equals("D")) {
             throw new SyntaxErrorException("illegal command: " + token);
         }
-        program.add(new CommandPenDown());
+        program.addCommand(new CommandPenDown());
     }
 
-    private void compilePenUp(ArrayList<Command> program, String line)
+    private void compilePenUp(Program program, String line)
             throws SyntaxErrorException {
         StringTokenizer tokens = new StringTokenizer(line);
         String token = tokens.nextToken();
         if (!token.equals("u") && !token.equals("U")) {
             throw new SyntaxErrorException("illegal command: " + token);
         }
-        program.add(new CommandPenUp());
+        program.addCommand(new CommandPenUp());
     }
 
-    private void compileMove(ArrayList<Command> program, String line)
+    private void compileMove(Program program, String line)
             throws SyntaxErrorException {
         StringTokenizer tokens = new StringTokenizer(line);
         String token = tokens.nextToken();
@@ -90,14 +98,14 @@ public class Compiler {
                 return;
             }
             for (int i = 0; i < times; ++i) {
-                program.add(new CommandMove());
+                program.addCommand(new CommandMove());
             }
         } catch (NumberFormatException e) {
             throw new SyntaxErrorException("move command needs an integer");
         }
     }
 
-    private void compileSetSpeed(ArrayList<Command> program, String line)
+    private void compileSetSpeed(Program program, String line)
             throws SyntaxErrorException {
         StringTokenizer tokens = new StringTokenizer(line);
         String token = tokens.nextToken();
@@ -112,13 +120,13 @@ public class Compiler {
             if (speed <= 0) {
                 throw new SyntaxErrorException("setSpeed command needs a positive integer");
             }
-            program.add(new CommandSetSpeed(speed));
+            program.addCommand(new CommandSetSpeed(speed));
         } catch (NumberFormatException e) {
             throw new SyntaxErrorException("setSpeed command needs an integer");
         }
     }
 
-    private void compileTurn(ArrayList<Command> program, String line)
+    private void compileTurn(Program program, String line)
             throws SyntaxErrorException {
         StringTokenizer tokens = new StringTokenizer(line);
         String token = tokens.nextToken();
@@ -130,13 +138,13 @@ public class Compiler {
         }
         try {
             Float degrees = Float.parseFloat(tokens.nextToken());
-            program.add(new CommandTurn(degrees));
+            program.addCommand(new CommandTurn(degrees));
         } catch (NumberFormatException e) {
             throw new SyntaxErrorException("move command needs degrees");
         }
     }
 
-    private void compileWarp(ArrayList<Command> program, String line)
+    private void compileWarp(Program program, String line)
             throws SyntaxErrorException {
         StringTokenizer tokens = new StringTokenizer(line);
         String token = tokens.nextToken();
@@ -150,9 +158,27 @@ public class Compiler {
             float[] point = new float[2];
             point[0] = Float.parseFloat(tokens.nextToken());
             point[1] = Float.parseFloat(tokens.nextToken());
-            program.add(new CommandWarp(point));
+            program.addCommand(new CommandWarp(point));
         } catch (NumberFormatException e) {
             throw new SyntaxErrorException("warp command needs x y");
         }
+    }
+
+    private void compileName(Program program, String line) throws SyntaxErrorException {
+        StringTokenizer tokens = new StringTokenizer(line);
+        String token = tokens.nextToken();
+        if (!token.equals("n") && !token.equals("N")) {
+            throw new SyntaxErrorException("illegal command: " + token);
+        }
+        if (!tokens.hasMoreTokens()) {
+            throw new SyntaxErrorException("name command needs a name");
+        }
+        token = tokens.nextToken();
+        program.addCommand(new CommandName(token));
+    }
+
+    private void compileExit(Program program) {
+        Command cmd = new CommandExit();
+        program.addCommand(cmd);
     }
 }

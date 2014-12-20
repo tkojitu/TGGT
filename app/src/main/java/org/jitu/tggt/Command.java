@@ -72,3 +72,22 @@ class CommandSetSpeed extends Command {
         vm.setSpeed(speed);
     }
 }
+
+class CommandName extends Command {
+    public CommandName(String name) {
+        super(name);
+    }
+
+    public void execute(VirtualMachine vm) {
+        vm.newTurtle((String) arg);
+    }
+}
+
+class CommandExit extends Command {
+    public CommandExit() {
+    }
+
+    public void execute(VirtualMachine vm) {
+        vm.exit();
+    }
+}

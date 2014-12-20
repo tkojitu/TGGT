@@ -1,6 +1,21 @@
+n rectangle
 w 100 100
 d
 m 10
 t 90
+m 10
+t 90
+m 10
+t 90
+m 10
+u
+
+n triangle
+w 100 100
+d
+m 10
+t 120
+m 10
+t 120
 m 10
 u

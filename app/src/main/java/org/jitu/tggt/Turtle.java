@@ -7,15 +7,18 @@ import android.graphics.PointF;
 import java.util.ArrayList;
 
 public class Turtle {
+    String name;
     private float x = 0.0f;
     private float y = 0.0f;
     private float direction = 0.0f;
     private int speed = 5;
     private boolean drawing = false;
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private ArrayList<ArrayList<PointF>> strokes = new ArrayList<ArrayList<PointF>>();
+    private ArrayList<ArrayList<PointF>> strokes = new ArrayList<>();
 
-    public Turtle() {}
+    public Turtle(String name) {
+        this.name = name;
+    }
 
     public void warp(float x, float y) {
         this.x = x;
@@ -43,7 +46,7 @@ public class Turtle {
 
     public void penDown() {
         drawing = true;
-        ArrayList<PointF> stroke = new ArrayList<PointF>();
+        ArrayList<PointF> stroke = new ArrayList<>();
         stroke.add(new PointF(x, y));
         strokes.add(stroke);
     }
