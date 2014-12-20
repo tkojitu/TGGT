@@ -4,14 +4,10 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Toast;
-
-import java.io.File;
-import java.io.IOException;
 
 public class CrystalView extends View {
-    Crystal crystal = new Crystal(this);
-    VirtualMachine vm = new VirtualMachine();
+    private Crystal crystal = new Crystal(this);
+    private TickListener listener;
 
     public CrystalView(Context context) {
         super(context);
@@ -25,35 +21,13 @@ public class CrystalView extends View {
         super(context, attrs, defStyleAttr);
     }
 
-    public void redraw() {
-        vm.run();
+    public void setTickListener(TickListener arg) {
+        listener = arg;
     }
 
-    public void onDraw(Canvas c) {
-        vm.execute(c);
-    }
-
-    public void load(File file) {
-        try {
-            vm.load(file);
-        } catch (IOException | SyntaxErrorException e) {
-            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+    public void onDraw(Canvas canvas) {
+        if (listener != null) {
+            listener.onTick(canvas);
         }
-    }
-
-    public void reload() {
-        try {
-            vm.reload();
-        } catch (IOException | SyntaxErrorException e) {
-            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void save() {
-        vm.save();
-    }
-
-    public void stop() {
-        vm.abend();
     }
 }

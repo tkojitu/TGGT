@@ -14,8 +14,8 @@ public class Core {
     /**
      * cf. GestureStore.java (android.gesture.GestureStore) and GestureBuilder
      */
-    public void dump(ArrayList<Turtle> turtles, File sourceFile) throws IOException {
-        File dumpFile = new File(sourceFile.getPath(), "tggt.gestures");
+    public String dump(ArrayList<Turtle> turtles, File sourceFile) throws IOException {
+        File dumpFile = new File(sourceFile.getParent(), "tggt.gestures");
         FileOutputStream fos = new FileOutputStream(dumpFile);
         DataOutputStream dos = new DataOutputStream(fos);
         dos.writeShort(1); // version
@@ -24,6 +24,7 @@ public class Core {
         for (Turtle turtle : turtles) {
             dumpTurtle(turtle, id++, dos);
         }
+        return dumpFile.getAbsolutePath();
     }
 
     private void dumpTurtle(Turtle turtle, long id, DataOutputStream dos) throws IOException {

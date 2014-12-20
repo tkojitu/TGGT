@@ -11,8 +11,13 @@ public class VirtualMachine {
     private Program program;
     private ArrayList<Turtle> turtles = new ArrayList<>();
     private File source;
+    private PortListener listener;
 
     public VirtualMachine() {
+    }
+
+    public void setPortListener(PortListener arg) {
+        listener = arg;
     }
 
     public void load(File file) throws IOException, SyntaxErrorException {
@@ -34,8 +39,9 @@ public class VirtualMachine {
         pc = 0;
     }
 
-    public void save() {
-
+    public String save() throws IOException {
+        Core core = new Core();
+        return core.dump(turtles, source);
     }
 
     public void execute(Canvas canvas) {
@@ -91,14 +97,23 @@ public class VirtualMachine {
     }
 
     public void newTurtle(String name) {
+        if (listener != null) {
+            listener.onPort(name);
+        }
         turtles.add(new Turtle(name));
     }
 
     public void exit() {
+        if (listener != null) {
+            listener.onPort("");
+        }
         pc = -2;
     }
 
     public void abend() {
+        if (listener != null) {
+            listener.onPort("");
+        }
         pc = -1;
     }
 }

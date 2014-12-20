@@ -3,34 +3,35 @@ package org.jitu.tggt;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements TickListener, PortListener {
     private static final int REQUEST_ACTION_GET_CONTENT = 11;
+
+    private VirtualMachine vm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        vm = new VirtualMachine();
+        vm.setPortListener(this);
+        getCrystalView().setTickListener(this);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+    private CrystalView getCrystalView() {
+        return (CrystalView) findViewById(R.id.view);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class MainActivity extends Activity {
         case REQUEST_ACTION_GET_CONTENT:
             if (resultCode == RESULT_OK) {
                 String path = data.getData().getPath();
-                getCrystalView().load(new File(path));
+                load(new File(path));
             }
             break;
         default:
@@ -47,8 +48,12 @@ public class MainActivity extends Activity {
         }
     }
 
-    private CrystalView getCrystalView() {
-        return (CrystalView) findViewById(R.id.view);
+    public void load(File file) {
+        try {
+            vm.load(file);
+        } catch (IOException | SyntaxErrorException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     public void onClickLoad(View view) {
@@ -62,18 +67,41 @@ public class MainActivity extends Activity {
     }
 
     public void onClickReload(View view) {
-        getCrystalView().reload();
+        try {
+            vm.reload();
+        } catch (IOException | SyntaxErrorException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     public void onClickDraw(View view) {
-        getCrystalView().redraw();
+        vm.run();
     }
 
     public void onClickSave(View view) {
-        getCrystalView().save();
+        try {
+            String path = vm.save();
+            getTextName().setText(path);
+        } catch (IOException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     public void onClickStop(View view) {
-        getCrystalView().stop();
+        vm.abend();
+    }
+
+    @Override
+    public void onTick(Canvas canvas) {
+        vm.execute(canvas);
+    }
+
+    @Override
+    public void onPort(String text) {
+        getTextName().setText(text);
+    }
+
+    private TextView getTextName() {
+        return (TextView) findViewById(R.id.text_name);
     }
 }
