@@ -8,13 +8,15 @@ TGGT is an interpreter for turtle graphics. TGGT saves diagrams as gesture data.
 TGGT Language
 ---------------
 
-|d         | pen Down                               |
-|m times   | Move forward n times (n is an integer) |
-|n name    | gesture Name                           |
-|s ppf     | Set pixels per frame in Move           |
-|t degrees | Turn degrees clockwise (d is a float)  |
-|u         | pen Up                                 |
-|w x y     | Warp at x,y (x and y are floats)       |
+| Command   | Description                            |
+| --------- | -------------------------------------- |
+| d         | pen Down                               |
+| m times   | Move forward n times (n is an integer) |
+| n name    | gesture Name                           |
+| s ppf     | Set pixels per frame in Move           |
+| t degrees | Turn degrees clockwise (d is a float)  |
+| u         | pen Up                                 |
+| w x y     | Warp at x,y (x and y are floats)       |
 
 Examples
 --------
