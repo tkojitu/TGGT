@@ -1,7 +1,7 @@
 TGGT: Teenage Gesture Generative Turtles
 ========================================
 
-TGGT generates a gesture data that android.gesture.GestureLibrary can load.
+TGGT generates gesture data that android.gesture.GestureLibrary can load.
 
 TGGT is an interpreter for turtle graphics. TGGT saves diagrams as gesture data.
 
