@@ -38,7 +38,7 @@ u
 GestureDetector
 ---------------
 
-You can check the gesture data by using [GestureDetector](https://github.com/tkojitu/GestureDetector).
+You can check the gesture data by using [GestureChecker](https://github.com/tkojitu/GestureChecker).
 
 License
 -------
