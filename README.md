@@ -35,7 +35,7 @@ m 100
 u
 ```
 
-GestureDetector
+GestureChecker
 ---------------
 
 You can check the gesture data by using [GestureChecker](https://github.com/tkojitu/GestureChecker).
